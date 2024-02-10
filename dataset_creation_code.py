@@ -4,6 +4,7 @@ import time
 import threading
 import queue
 import pickle
+import matplotlib.pyplot as plt
 
 # Desired sample rate 16000 Hz
 sample_rate = 16000
@@ -33,3 +34,9 @@ for i in range(0, len(audio_data), frame_length):
 # Save the labeled samples to a file
 with open('label_samples.pkl', 'wb') as file:
     pickle.dump(labeled_samples, file)
+
+# Print out the labeled samples
+for sample in labeled_samples:
+    print("Label:", sample[1])  # Print the label
+    plt.plot(sample[0])  # Plot the audio data
+    plt.show()
