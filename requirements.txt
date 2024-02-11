@@ -7,3 +7,9 @@ pickle
 matplotlib.pyplot
 Wav2Vec2ForSequenceClassification, Wav2Vec2Tokenizer
 torch
+Sequential
+Dense, Flatten, BatchNormalization, Dropout
+Adam
+EarlyStopping, ModelCheckpoint
+train_test_split
+ tensorflow
