@@ -1,2 +1,9 @@
 librosa
 numpy
+time
+threading
+queue
+pickle
+matplotlib.pyplot
+Wav2Vec2ForSequenceClassification, Wav2Vec2Tokenizer
+torch
