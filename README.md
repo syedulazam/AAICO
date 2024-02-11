@@ -19,6 +19,16 @@ More details on the challenge are provided here: https://docs.google.com/documen
 
 You can evaluate your results directly on Colab in which the scoring method is fully explicit: https://colab.research.google.com/drive/1ekMF1UFfr3djseliJleUNpvzfyIJP57G?usp=sharing by uploading the results.pkl file (along with the audio_aaico_challenge.wav file).
 
+<h2>Solution description</h2>
+
+<h4>Team name: Encrypters</h4>
+
+<h4>Members:</h4>
+
+Taqhveem Abbas - taqhveem@gmail.com <br>
+Omar Abdullah - amooreee34@gmail.com <br>
+Syedul Azam - syedulazam6000@gmail.com
+
 <h2>Documentaion</h2>
 
 This documentation provides a step-by-step guide on how to use and understand the provided code for the AAICO Voice Processing Challenge. The challenge involves processing a streaming audio file, labeling each sample, and saving the results. The code is divided into three main parts: audio streaming simulation, sample labeling, and training a classification model.
