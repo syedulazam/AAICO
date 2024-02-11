@@ -1,4 +1,5 @@
 import numpy as np
+from transformers import Wav2Vec2ForSequenceClassification, Wav2Vec2CTCTokenizer
 from keras.models import Sequential
 from keras.layers import Dense, Flatten, BatchNormalization, Dropout
 from keras.optimizers import Adam
@@ -6,6 +7,7 @@ from keras.callbacks import EarlyStopping, ModelCheckpoint
 from sklearn.model_selection import train_test_split
 import pickle
 import tensorflow as tf
+import librosa  # Add this import
 
 def load_labeled_data():
     # Load your labeled dataset (replace this with your actual loading mechanism)
@@ -54,7 +56,26 @@ def train_model():
     # Feature shape for the neural network
     input_shape = features.shape[1:]
 
-    model = build_model(input_shape)
+    # Load Wav2Vec2 model and tokenizer for sequence classification
+    model_name = "facebook/wav2vec2-base-960h"
+    tokenizer = Wav2Vec2CTCTokenizer.from_pretrained(model_name)  # Use Wav2Vec2CTCTokenizer
+    wav2vec2_model = Wav2Vec2ForSequenceClassification.from_pretrained(model_name)
+
+    # Extract features from the Wav2Vec2 model
+    wav2vec2_features = [tokenizer(sample[0], return_tensors="pt", padding="max_length", truncation=True, max_length=max_length, stride=max_length, sampling_rate=16000) for sample in labeled_samples]
+    wav2vec2_features = [item['input_values'].numpy() for item in wav2vec2_features]
+
+    # Convert Wav2Vec2 features to TensorFlow tensor
+    wav2vec2_features = tf.convert_to_tensor(wav2vec2_features, dtype=tf.float32)
+
+    # Flatten the Wav2Vec2 features
+    wav2vec2_features = tf.reshape(wav2vec2_features, (wav2vec2_features.shape[0], -1))
+
+    # Concatenate the original features with Wav2Vec2 features
+    combined_features = tf.concat([features, wav2vec2_features], axis=1)
+
+    # Build and compile the model
+    model = build_model(combined_features.shape[1:])
 
     # Define callbacks (early stopping and model checkpoint)
     callbacks = [
@@ -64,7 +85,7 @@ def train_model():
 
     # Train the model
     history = model.fit(
-        x_train, y_train,
+        combined_features.numpy(), labels.numpy(),
         validation_data=(x_val, y_val),
         epochs=20,  # Adjust as needed
         batch_size=32,  # Adjust as needed
@@ -76,7 +97,4 @@ def train_model():
 
     # Save training history for analysis or plotting
     with open('training_history.pkl', 'wb') as file:
-        pickle.dump(history.history, file)
-
-if __name__ == "__main__":
-    train_model()
+        pickle.dump(history.history)
