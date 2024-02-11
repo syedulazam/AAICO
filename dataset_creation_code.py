@@ -35,8 +35,8 @@ for i in range(0, len(audio_data), frame_length):
 with open('label_samples.pkl', 'wb') as file:
     pickle.dump(labeled_samples, file)
 
-# Print out the labeled samples
-for sample in labeled_samples:
-    print("Label:", sample[1])  # Print the label
-    plt.plot(sample[0])  # Plot the audio data
-    plt.show()
+# # Print out the labeled samples
+# for sample in labeled_samples:
+#     print("Label:", sample[1])  # Print the label
+#     plt.plot(sample[0])  # Plot the audio data
+#     plt.show()
